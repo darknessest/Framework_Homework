@@ -33,6 +33,14 @@ class Record {
         cout << "             Age: ";
         cin >> age;
     }
+    void print() {
+       cout << "\nName: " << it->name
+             << "\nSex: " << it->sex
+             << "\nID: " << it->ID
+             << "\nBirthday: " << it->birthday
+             << "\nAddress: " << it->address
+             << "\nAge: " << it->age 
+    }
 //    Record(const string a, const char &b, const string c,
 //           const string d, const string e, const unsigned short &f)
 //    {
@@ -101,6 +109,7 @@ void Student::print(deque<Student> &X, const string stud_num) {
       return t.number == stud_num;
     });
     if (it != X.end()) {
+        //Record::it.print();
         cout << "\nName: " << it->name
              << "\nSex: " << it->sex
              << "\nID: " << it->ID
@@ -128,7 +137,7 @@ void Student::change(deque<Student> &X, const string stud_num) {
         cout << "A student with number " << stud_num << " has been succefully found.\n\n"
              << "Now you can change all information.\n";
         cout << "Please enter Name: ";
-        cin >> (it)->name;                            //add feature to leave the same info after pressing enter
+        cin >> it->name;                            //add feature to leave the same info after pressing enter
         cout << "             Sex: ";
         cin >> it->sex;
         cout << "             ID: ";
@@ -185,7 +194,7 @@ class Professor: protected Staff {
  protected:
     string fieldOfTeaching;
     string research;
-    unsigned numOfPostgrads{};
+    unsigned numOfPostgrads;
  public:
     Professor() {
         cin.ignore();     // skips \n
