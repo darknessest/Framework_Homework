@@ -5,8 +5,10 @@
 
 using namespace std;
 
-void ClearScreen() {
-    cout << string(100, '\n');
+inline void ClearScreen() {
+//      printf("\033c"); check which one is working  
+      printf("\033[H\033[J");
+//    cout << string(100, '\n');
 }
 
 class Record {
@@ -34,12 +36,12 @@ class Record {
         cin >> age;
     }
     void print() {
-       cout << "\nName: " << it->name
-             << "\nSex: " << it->sex
-             << "\nID: " << it->ID
-             << "\nBirthday: " << it->birthday
-             << "\nAddress: " << it->address
-             << "\nAge: " << it->age 
+       cout << "\nName: " << this->name
+             << "\nSex: " << this->sex
+             << "\nID: " << this->ID
+             << "\nBirthday: " << this->birthday
+             << "\nAddress: " << this->address
+             << "\nAge: " << this->age 
     }
 //    Record(const string a, const char &b, const string c,
 //           const string d, const string e, const unsigned short &f)
@@ -60,8 +62,8 @@ class Student: protected Record {
  public:
     Student() {
         cout << "             Student Number: ";
-        cin >> number;
-        cin.ignore();     // skips \n
+        getline(cin,  number);
+        //cin.ignore();     // skips \n
         cout << "             Dormitory Number: ";
         getline(cin, dormitory);
         cout << "             Major: ";
@@ -94,82 +96,13 @@ class Student: protected Record {
             && a.age == age && a.number == number
             && a.dormitory == dormitory && a.major == major);
     }
-//    Student(string stud_num){
-//        number = stud_num ;
-//    }
 
-    static void print(deque<Student> &X, const string stud_num);
+    static void print(deque<Student> &X, string const& stud_num);
 
-    static void change(deque<Student> &X, const string stud_num);
+    static void change(deque<Student> &X, string const& stud_num);
 
-    static bool lookup(deque<Student> &X, const string stud_num);
+    static bool lookup(deque<Student> &X, string const& stud_num);
 };
-void Student::print(deque<Student> &X, const string stud_num) {
-    auto it = find_if(X.begin(), X.end(), [stud_num](const Student &t) -> bool {
-      return t.number == stud_num;
-    });
-    if (it != X.end()) {
-        //Record::it.print();
-        cout << "\nName: " << it->name
-             << "\nSex: " << it->sex
-             << "\nID: " << it->ID
-             << "\nBirthday: " << it->birthday
-             << "\nAddress: " << it->address
-             << "\nAge: " << it->age
-             << "\nStudent Number: " << it->number
-             << "\nDormitory Number: " << it->dormitory
-             << "\nMajor: " << it->major;
-        cin.ignore();
-        cout << "\n\nPress any key to continue...\n\n";
-        cin.get();
-    } else {
-        cout << "There's no student with number " << stud_num << endl;
-    }
-}
-void Student::change(deque<Student> &X, const string stud_num) {
-    auto it = find_if(X.begin(), X.end(), [stud_num](const Student &t) -> bool {
-      return t.number == stud_num;
-    });
-    if (it == X.end()) {
-        cout << "There's no student with such number.\nPress enter to proceed\n\n";
-        cin.get();
-    } else {
-        cout << "A student with number " << stud_num << " has been succefully found.\n\n"
-             << "Now you can change all information.\n";
-        cout << "Please enter Name: ";
-        cin >> it->name;                            //add feature to leave the same info after pressing enter
-        cout << "             Sex: ";
-        cin >> it->sex;
-        cout << "             ID: ";
-        cin >> it->ID;
-        cout << "             Birthday: ";
-        cin >> it->birthday;
-        cout << "             Address: ";
-        cin.ignore();
-        getline(cin, it->address);
-        cout << "             Age: ";
-        cin >> it->age;
-        cout << "             Student Number: ";
-        cin >> it->number;
-        cin.ignore();
-        cout << "             Dormitory Number: ";
-        getline(cin, it->dormitory);
-        cout << "             Major: ";
-        cin >> it->major;
-        cout << "             Year: ";
-        cin >> it->year;
-        cin.ignore();
-        cout << "Press any key to continue...\n";
-        cin.get();
-    }
-}
-bool Student::lookup(deque<Student> &X, const string stud_num) {
-    auto it = find_if(X.begin(), X.end(), [stud_num](const Student &t) -> bool {
-      return t.number == stud_num;
-    });
-
-    return it == X.end() ? false : true;
-}
 
 class Staff: protected Record {
  protected:
@@ -225,81 +158,6 @@ class Professor: protected Staff {
 
     static bool lookup(deque<Professor> &X, const unsigned long &work_num);
 };
-void Professor::print(deque<Professor> &X, const unsigned long &work_num) {
-    auto it = find_if(X.begin(), X.end(), [work_num](const Professor &t) -> bool {
-      return t.worker_number == work_num;
-    });
-    if (it != X.end()) {
-        cout << "\nName: " << it->name
-             << "\nSex: " << it->sex
-             << "\nID: " << it->ID
-             << "\nBirthday: " << it->birthday
-             << "\nAddress: " << it->address
-             << "\nAge: " << it->age
-             << "\nWorker Number: " << it->worker_number
-             << "\nAppartment: " << it->appartment
-             << "\nWorking Hours: " << it->dailyHours
-             << "\nSalary: " << it->salary;
-        cin.ignore();
-        cout << "\n\nPress any key to continue...\n\n";
-        cin.get();
-    } else {
-        cout << "There's no professor with number " << work_num << endl;
-    }
-}
-void Professor::change(deque<Professor> &X, const unsigned long &work_num) {
-    auto it = find_if(X.begin(), X.end(), [work_num](const Professor &t) -> bool {
-      return t.worker_number == work_num;
-    });
-    if (it == X.end()) {
-        cout << "There's no record with such number.\nPress enter to proceed\n\n";
-        cin.get();
-    } else {
-        cout << "A professor with number " << work_num << " has been succefully found.\n\n"
-             << "Now you can change all information.\n";
-        cout << "Please enter Name: ";
-        cin >> it->name;                            //add feature to leave the same info after pressing enter
-        cout << "             Sex: ";
-        cin >> it->sex;
-        cout << "             ID: ";
-        cin >> it->ID;
-        cout << "             Birthday: ";
-        cin >> it->birthday;
-        cout << "             Address: ";
-        cin.ignore();
-        getline(cin, it->address);
-        cout << "             Age: ";
-        cin >> it->age;
-        cout << "             Worker Number: ";
-        cin >> it->worker_number;
-        cin.ignore();     // skips \n
-        cout << "             Appartment: ";
-        getline(cin, it->appartment);
-        cout << "             Working Hours: ";
-        cin >> it->dailyHours;
-        cout << "             Salary: ";
-        cin >> it->salary;
-        cin.ignore();     // skips \n
-        cout << "             Field Of Teaching: ";
-        getline(cin, it->fieldOfTeaching);
-        cout << "             Research Project: ";
-        getline(cin, it->research);
-        cout << "             Number Of Postgraduate Students: ";
-        cin >> it->numOfPostgrads;
-
-        cin.ignore();
-
-        cout << "Press any key to continue...\n";
-        cin.get();
-    }
-}
-bool Professor::lookup(deque<Professor> &X, const unsigned long &work_num) {
-    auto it = find_if(X.begin(), X.end(), [work_num](const Professor &t) -> bool {
-      return t.worker_number == work_num;
-    });
-
-    return it == X.end() ? false : true;
-}
 
 class Worker: protected Staff {
  protected:
@@ -327,78 +185,7 @@ class Worker: protected Staff {
 
     static bool lookup(deque<Worker> &X, const unsigned long &work_num);
 };
-void Worker::print(deque<Worker> &X, const unsigned long &work_num) {
-    auto it = find_if(X.begin(), X.end(), [work_num](const Worker &t) -> bool {
-      return t.worker_number == work_num;
-    });
-    if (it != X.end()) {
-        cout << "\nName: " << it->name
-             << "\nSex: " << it->sex
-             << "\nID: " << it->ID
-             << "\nBirthday: " << it->birthday
-             << "\nAddress: " << it->address
-             << "\nAge: " << it->age
-             << "\nWorker Number: " << it->worker_number
-             << "\nAppartment: " << it->appartment
-             << "\nWorking Hours: " << it->dailyHours
-             << "\nSalary: " << it->salary
-             << "\nJob: " << it->job;
-        cin.ignore();
-        cout << "\n\nPress any key to continue...\n\n";
-        cin.get();
-    } else {
-        cout << "There's no worker with number " << work_num << endl;
-    }
-}
-void Worker::change(deque<Worker> &X, const unsigned long &work_num) {
-    auto it = find_if(X.begin(), X.end(), [work_num](const Worker &t) -> bool {
-      return t.worker_number == work_num;
-    });
-    if (it == X.end()) {
-        cout << "There's no record with such number.\nPress enter to proceed\n\n";
-        cin.get();
-    } else {
-        cout << "A worker with number " << work_num << " has been succefully found.\n\n"
-             << "Now you can change all information.\n";
-        cout << "Please enter Name: ";
-        cin >> it->name;                            //add feature to leave the same info after pressing enter
-        cout << "             Sex: ";
-        cin >> it->sex;
-        cout << "             ID: ";
-        cin >> it->ID;
-        cout << "             Birthday: ";
-        cin >> it->birthday;
-        cout << "             Address: ";
-        cin.ignore();
-        getline(cin, it->address);
-        cout << "             Age: ";
-        cin >> it->age;
-        cout << "             Worker Number: ";
-        cin >> it->worker_number;
-        cin.ignore();     // skips \n
-        cout << "             Appartment: ";
-        getline(cin, it->appartment);
-        cout << "             Working Hours: ";
-        cin >> it->dailyHours;
-        cout << "             Salary: ";
-        cin >> it->salary;
-        cin.ignore();     // skips \n
-        cout << "             Job: ";
-        getline(cin, it->job);
 
-        cin.ignore();
-
-        cout << "Press any key to continue...\n";
-        cin.get();
-    }
-}
-bool Worker::lookup(deque<Worker> &X, const unsigned long &work_num) {
-    auto it = find_if(X.begin(), X.end(), [work_num](const Worker &t) -> bool {
-      return t.worker_number == work_num;
-    });
-
-    return it == X.end() ? false : true;
-}
 //int chooseTimes()
 //{
 //    cout << "1) Continuous adding\n"
@@ -450,7 +237,7 @@ void second_screen() {
 //    }
 //}
 
-//void initialization(ifstream &XX, deque<Student> list)
+//void initialization(ifstream &XX, deque<Student> &list)
 //{
 //    string temporary;
 //    getline(XX, temporary, '|');
@@ -487,10 +274,11 @@ void second_screen() {
 //}
 
 int main() {
+    std::ios::sync_with_stdio(false);
     short temp = 0;
-    ifstream fs;   //add a checking system whether
-    //file has some records already
-    //and make an initialization func
+    ifstream fs;    //add a checking system whether
+                    //file has some records already
+                    //and make an initialization func
     fs.open("/Users/Alexey/ClionProjects/cpp17shiyan/out1.txt");
     if (!fs.is_open())
         cerr << ("couldn't open file");
@@ -689,3 +477,217 @@ int main() {
     }
 }
 
+
+void Student::print(deque<Student> &X, string const& stud_num) {
+    auto it = find_if(X.begin(), X.end(), [stud_num](const Student &t) -> bool {
+      return t.number == stud_num;
+    });
+    if (it != X.end()) {
+        //Record::it.print();
+        cout << "\nName: " << it->name
+             << "\nSex: " << it->sex
+             << "\nID: " << it->ID
+             << "\nBirthday: " << it->birthday
+             << "\nAddress: " << it->address
+             << "\nAge: " << it->age
+             << "\nStudent Number: " << it->number
+             << "\nDormitory Number: " << it->dormitory
+             << "\nMajor: " << it->major;
+        cin.ignore();
+        cout << "\n\nPress any key to continue...\n\n";
+        cin.get();
+    } else {
+        cout << "There's no student with number " << stud_num << endl;
+    }
+}
+void Student::change(deque<Student> &X, string const& stud_num) {
+    auto it = find_if(X.begin(), X.end(), [stud_num](const Student &t) -> bool {
+      return t.number == stud_num;
+    });
+    if (it == X.end()) {
+        cout << "There's no student with such number.\nPress enter to proceed\n\n";
+        cin.get();
+    } else {
+        cout << "A student with number " << stud_num << " has been succefully found.\n\n"
+             << "Now you can change all information.\n";
+        cout << "Please enter Name: ";
+        getline(cin, it->name);                            //add feature to leave the same info after pressing enter
+        cout << "             Sex: ";
+        getline(cin, it->sex);
+        cout << "             ID: ";
+        getline(cin, it->ID);
+        cout << "             Birthday: ";
+        getline(cin, it->birthday);
+        cout << "             Address: ";
+        //cin.ignore();
+        getline(cin, it->address);
+        cout << "             Age: ";
+        getline(cin,it->age);
+        cout << "             Student Number: ";
+        getline(cinv, it->number);
+        //cin.ignore();
+        cout << "             Dormitory Number: ";
+        getline(cin, it->dormitory);
+        cout << "             Major: ";
+        getline(cin, it->major);
+        cout << "             Year: ";
+        getline(cin, it->year);
+//        cin.ignore();
+        cout << "Press any key to continue...\n";
+        cin.get();
+    }
+}
+bool Student::lookup(deque<Student> &X, string const& stud_num) {
+    auto it = find_if(X.begin(), X.end(), [stud_num](const Student &t) -> bool {
+      return t.number == stud_num;
+    });
+
+    return it == X.end() ? false : true;
+}
+void Professor::print(deque<Professor> &X, const unsigned long &work_num) {
+    auto it = find_if(X.begin(), X.end(), [work_num](const Professor &t) -> bool {
+      return t.worker_number == work_num;
+    });
+    if (it != X.end()) {
+        cout << "\nName: " << it->name
+             << "\nSex: " << it->sex
+             << "\nID: " << it->ID
+             << "\nBirthday: " << it->birthday
+             << "\nAddress: " << it->address
+             << "\nAge: " << it->age
+             << "\nWorker Number: " << it->worker_number
+             << "\nAppartment: " << it->appartment
+             << "\nWorking Hours: " << it->dailyHours
+             << "\nSalary: " << it->salary;
+        cin.ignore();
+        cout << "\n\nPress any key to continue...\n\n";
+        cin.get();
+    } else {
+        cout << "There's no professor with number " << work_num << endl;
+    }
+}
+void Professor::change(deque<Professor> &X, const unsigned long &work_num) {
+    auto it = find_if(X.begin(), X.end(), [work_num](const Professor &t) -> bool {
+      return t.worker_number == work_num;
+    });
+    if (it == X.end()) {
+        cout << "There's no record with such number.\nPress enter to proceed\n\n";
+        cin.get();
+    } else {
+        cout << "A professor with number " << work_num << " has been succefully found.\n\n"
+             << "Now you can change all information.\n";
+        cout << "Please enter Name: ";
+        getline(cin, it->name);                            //add feature to leave the same info after pressing enter
+        cout << "             Sex: ";
+        getline(cin, it->sex);
+        cout << "             ID: ";
+        getline(cin, it->ID);
+        cout << "             Birthday: ";
+        getline(cin, it->birthday);
+        cout << "             Address: ";
+//        cin.ignore();
+        getline(cin, it->address);
+        cout << "             Age: ";
+        getline(cin, it->age);
+        cout << "             Worker Number: ";
+        getline(cin, it->worker_number);
+//        cin.ignore();     // skips \n
+        cout << "             Appartment: ";
+        getline(cin, it->appartment);
+        cout << "             Working Hours: ";
+        getline(cin,it->dailyHours);
+        cout << "             Salary: ";
+        getline(cin,it->salary);
+//        cin.ignore();     // skips \n
+        cout << "             Field Of Teaching: ";
+        getline(cin, it->fieldOfTeaching);
+        cout << "             Research Project: ";
+        getline(cin, it->research);
+        cout << "             Number Of Postgraduate Students: ";
+        getline(cin,it->numOfPostgrads);
+
+//        cin.ignore();
+
+        cout << "Press any key to continue...\n";
+        cin.get();
+    }
+}
+bool Professor::lookup(deque<Professor> &X, const unsigned long &work_num) {
+    auto it = find_if(X.begin(), X.end(), [work_num](const Professor &t) -> bool {
+      return t.worker_number == work_num;
+    });
+
+    return it == X.end() ? false : true;
+}
+void Worker::print(deque<Worker> &X, const unsigned long &work_num) {
+    auto it = find_if(X.begin(), X.end(), [work_num](const Worker &t) -> bool {
+      return t.worker_number == work_num;
+    });
+    if (it != X.end()) {
+        cout << "\nName: " << it->name
+             << "\nSex: " << it->sex
+             << "\nID: " << it->ID
+             << "\nBirthday: " << it->birthday
+             << "\nAddress: " << it->address
+             << "\nAge: " << it->age
+             << "\nWorker Number: " << it->worker_number
+             << "\nAppartment: " << it->appartment
+             << "\nWorking Hours: " << it->dailyHours
+             << "\nSalary: " << it->salary
+             << "\nJob: " << it->job;
+        cin.ignore();
+        cout << "\n\nPress any key to continue...\n\n";
+        cin.get();
+    } else {
+        cout << "There's no worker with number " << work_num << endl;
+    }
+}
+void Worker::change(deque<Worker> &X, const unsigned long &work_num) {
+    auto it = find_if(X.begin(), X.end(), [work_num](const Worker &t) -> bool {
+      return t.worker_number == work_num;
+    });
+    if (it == X.end()) {
+        cout << "There's no record with such number.\nPress enter to proceed\n\n";
+        cin.get();
+    } else {
+        cout << "A worker with number " << work_num << " has been succefully found.\n\n"
+             << "Now you can change all information.\n";
+        cout << "Please enter Name: ";
+        getline(cin, it->name);                            //add feature to leave the same info after pressing enter
+        cout << "             Sex: ";
+        getline(cin, it->sex);
+        cout << "             ID: ";
+        getline(cin, it->ID);
+        cout << "             Birthday: ";
+        getline(cin, it->birthday);
+        cout << "             Address: ";
+//        cin.ignore();
+        getline(cin, it->address);
+        cout << "             Age: ";
+        getline(cin, it->age);
+        cout << "             Worker Number: ";
+        getline(cin,it->worker_number);
+//        cin.ignore();     // skips \n
+        cout << "             Appartment: ";
+        getline(cin, it->appartment);
+        cout << "             Working Hours: ";
+        getline(cin, it->dailyHours);
+        cout << "             Salary: ";
+        getline(cin, it->salary);
+//        cin.ignore();     // skips \n
+        cout << "             Job: ";
+        getline(cin, it->job);
+
+//        cin.ignore();
+
+        cout << "Press any key to continue...\n";
+        cin.get();
+    }
+}
+bool Worker::lookup(deque<Worker> &X, const unsigned long &work_num) {
+    auto it = find_if(X.begin(), X.end(), [work_num](const Worker &t) -> bool {
+      return t.worker_number == work_num;
+    });
+
+    return it == X.end() ? false : true;
+}
