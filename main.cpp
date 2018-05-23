@@ -5,12 +5,6 @@
 
 using namespace std;
 
-void ClearScreen() {
-//      printf("\033c"); //check which one is working
-    printf("\033[H\033[J");
-//    cout << string(100, '\n');
-}
-
 class Record {
  protected:
     string name;
@@ -35,14 +29,6 @@ class Record {
         cout << "             Age: ";
         cin >> age;
     }
-//    void print() {
-//        cout << "\nName: " << this->name
-//             << "\nSex: " << this->sex
-//             << "\nID: " << this->ID
-//             << "\nBirthday: " << this->birthday
-//             << "\nAddress: " << this->address
-//             << "\nAge: " << this->age;
-//    }
     Record(string const &a, const char &b, string const &c,
            string const &d, string const &e, const unsigned short &f) {
         name = a;
@@ -53,7 +39,7 @@ class Record {
         age = f;
     }
 };
-class Student: protected Record {
+class Student: public Record {
     string number;
     string dormitory;   //pairs<string name, int number>
     string major;
@@ -73,7 +59,6 @@ class Student: protected Record {
         cout << "Press any key to continue...\n";
         cin.get();
     }
-
     Student(string const &a, const char &b, string const &c,
             string const &d, string const &e, const unsigned short &f,
             string const &g, string const &h, string const &j,
@@ -83,24 +68,25 @@ class Student: protected Record {
         major = j;
         year = k;
     }
-    /*inline*/bool operator==(Student const &a) {
+    bool operator==(Student const &a) {
         return (a.name == name && a.sex == sex && a.ID == ID
             && a.birthday == birthday && a.address == address
             && a.age == age && a.number == number
             && a.dormitory == dormitory && a.major == major);
     }
+    friend ostream &operator<<(ostream &out, const Student &a);
+    friend istream &operator>>(istream &in, Student &a);
+
+    static void add(vector<Student> &X, const Student &a);
 
     static void print(vector<Student> &X, string const &stud_num);
 
     static void change(vector<Student> &X, string const &stud_num);
 
     static bool lookup(vector<Student> &X, string const &stud_num);
-
-    friend ostream &operator<<(ostream &out, const Student &a);
-    friend istream &operator>>(istream &in, Student &a);
 };
 
-class Staff: protected Record {
+class Staff: public Record {
  protected:
     unsigned long worker_number;
     string appartment;
@@ -128,14 +114,17 @@ class Staff: protected Record {
         dailyHours = j;
         salary = k;
     }
-//    void print() {
-//        cout << "\nWorker Number: " << worker_number
-//             << "\nAppartment: " << appartment
-//             << "\nWorking Hours: " << dailyHours
-//             << "\nSalary: " << salary;
-//    }
+    template<class T>
+    static void add(vector<T> &X, const T &a)  {
+        if (!T::lookup(X, a.worker_number)){
+            X.push_back(a);
+            return;
+        }
+        else
+            cout << "\nRecord with worker number " << a.worker_number << " already exists\n";
+    }
 };
-class Professor: protected Staff {
+class Professor: public Staff {
  protected:
     string fieldOfTeaching;
     string research;
@@ -183,7 +172,7 @@ class Professor: protected Staff {
     static bool lookup(vector<Professor> &X, const unsigned long &work_num);
 };
 
-class Worker: protected Staff {
+class Worker: public Staff {
  protected:
     string job;
  public:
@@ -218,9 +207,14 @@ class Worker: protected Staff {
 
     static bool lookup(vector<Worker> &X, const unsigned long &work_num);
 };
-
+void ClearScreen() {
+//      printf("\033c"); //check which one is working
+    printf("\033[H\033[J");
+//    cout << string(100, '\n');
+}
 void first_screen() {
-    cout << "Welcome !\n" << "Choose the section:\n"
+    ClearScreen();
+    cout << "Choose the section:\n"
          << "1) Student\n"
          << "2) Professor\n"
          << "3) Worker\n"
@@ -229,18 +223,16 @@ void first_screen() {
 //        << "5) Make a regular person record\n";
 }
 void second_screen() {
-    //Welcoming to the screen of particular section,
-    // add a parameter to customize welcoming
-    cout << "1) Add a record" << endl
-         << "2) Print a record" << endl
-         << "3) Change a record" << endl
-         << "4) Delete a record" << endl
-         << "5) Find a record" << endl
-         << "6) Exit" << endl;
+    ClearScreen();
+    cout << "1) Add a record\n"
+         << "2) Print a record\n"
+         << "3) Change a record\n"
+         << "4) Delete a record\n"
+         << "5) Find a record\n"
+         << "6) Exit\n";
 }
 
 //void nesting(int option){                                  //second screen choosing menu
-//    //add screen cleaning
 //    second_screen();
 //    cin >> option;
 //    switch (option) {                                     //add screen cleaning
@@ -264,43 +256,65 @@ void second_screen() {
 //    }
 //}
 
-void initialization(fstream &XX, vector<Student> &list) {
+void initialization(vector<Student> &list1, vector<Professor> &list2, vector<Worker> &list3) {
+    cout << "initialization is in progress...\n";
+
+    fstream XX("in.txt", ios::in);
+    if (!XX)
+        cerr << ("couldn't open in.txt file");
     string temporary;
-//    getline(XX, temporary, '|');
     while (XX) {
         XX >> temporary;
         if (temporary == "Student") {
-            Student input_temporary("0", 'a', "0", "0", "0", 0, "0", "0", "0", 0);
+            Student input_temporary("", 'a', "", "", "", 0, "", "", "", 0);
             XX >> input_temporary;
-            list.emplace_back(input_temporary);
+            list1.push_back(input_temporary);
         }
-        //add init for worker and professor
+        if (temporary == "Professor") {
+            Professor input_temporary("", 'a', "", "", "", 0, 0, "", 0, 0, "", "", 0);
+            XX >> input_temporary;
+            list2.push_back(input_temporary);
+        }
+        if (temporary == "Worker") {
+            Worker input_temporary("", 'a', "", "", "", 0, 0, "", 0, 0, "");
+            XX >> input_temporary;
+            list3.push_back(input_temporary);
+        }
     }
     XX.close();
+    ClearScreen();
 }
 
-template<typename T>
-void fin_out(ofstream &XX, const vector<T> &list) {
-    for (auto const &x : list) {
-        XX << x;
+
+void fin_out(const vector<Student> &list1, const vector<Professor> &list2,
+             const vector<Worker> &list3) {
+    ofstream ofs("out.txt", ios::out);
+    if (!ofs)
+        cerr << ("couldn't open file");
+    for (auto const &x : list1) {
+        ofs << x;
     }
+    for (auto const &x : list2) {
+        ofs << x;
+    }
+    for (auto const &x : list3) {
+        ofs << x;
+    }
+    ofs.close();
     cout << "\nAll records were stored\n";
 }
 
 int main() {
-    std::ios::sync_with_stdio(false);       //improves I/O, because doesn't make sync between c++ and c-style I/O
+    std::ios::sync_with_stdio(false);       //improves I/O speed, because doesn't make sync between c++ and c-style I/O
     short temp = 0;
-
-    fstream fs("in.txt", ios::in);
-    if (!fs)
-        cerr << ("couldn't open in.txt file");
 
     vector<Student> students;
     vector<Professor> professors;
     vector<Worker> workers;
+    initialization(students, professors, workers);   //fs is handled inside
 
-    initialization(fs, students);   //fs closed inside
-
+    cout << "Welcome !\n";
+    ClearScreen();
     FIRST_SCREEN:
 
     first_screen();
@@ -308,17 +322,13 @@ int main() {
     ClearScreen();
     switch (temp) {
         case 1: {
-//            ClearScreen();
-            //add screen cleaning
             STUDENT_SCREEN:
             second_screen();
-
             cin >> temp;
             switch (temp) {
-                //add screen cleaning
                 case 1: {     //Adding record
-                    Student temp_inp;       //stud_num recur check
-                    students.push_back(temp_inp);
+                    Student temp_inp;
+                    Student::add(students, temp_inp);
                     goto STUDENT_SCREEN;
                 }
                 case 2: {   //Printing
@@ -357,7 +367,7 @@ int main() {
                         cout << "There's no student with student number " << temp_studnum << "\n";
                     goto STUDENT_SCREEN;
                 }
-                case 6: {
+                case 6: {   //leave
                     goto FIRST_SCREEN;
                 }
                 default: {
@@ -374,7 +384,8 @@ int main() {
             switch (temp) {
                 case 1: {     //Adding record
                     Professor temp_inp;
-                    professors.push_back(temp_inp);
+                    Staff::add(professors, temp_inp);
+//                    professors.emplace_back(temp_inp);
                     goto PROFESSOR_SCREEN;
                 }
                 case 2: {   //Printing
@@ -412,7 +423,7 @@ int main() {
                         cout << "There's no professor with such worker number\n\n";
                     goto PROFESSOR_SCREEN;
                 }
-                case 6: {
+                case 6: {   //leave
                     goto FIRST_SCREEN;
                 }
                 default: {
@@ -426,9 +437,10 @@ int main() {
             second_screen();
             cin >> temp;
             switch (temp) {
-                case 1: {     //Adding record
-                    Worker temp_inp;       //stud_num recur check
-                    workers.push_back(temp_inp);
+                case 1: {     //Adding
+                    Worker temp_inp;
+                    Staff::add(workers, temp_inp);
+                    workers.emplace_back(temp_inp);
                     goto WORKER_SCREEN;
                 }
                 case 2: {   //Printing
@@ -466,7 +478,7 @@ int main() {
                         cout << "There's no worker with such worker number\n";
                     goto WORKER_SCREEN;
                 }
-                case 6: {
+                case 6: {   //leave
                     goto FIRST_SCREEN;
                 }
                 default: {
@@ -478,10 +490,7 @@ int main() {
         }
         case 4: {
             //saving to output file;
-            ofstream ofs("out.txt", ios::out);
-            if (!ofs)
-                cerr << ("couldn't open file");
-            fin_out(ofs, students);
+            fin_out(students, professors, workers);
             return 0;
         }
         default: {
@@ -489,19 +498,20 @@ int main() {
             goto FIRST_SCREEN;
         }
     }
-
 }
 ostream &operator<<(ostream &out, const Student &a) {
-    out << "Student | " << a.name
-        << " | " << a.sex
-        << " | " << a.ID
-        << " | " << a.birthday
-        << " | " << a.address
-        << " | " << a.age
-        << " | " << a.number
-        << " | " << a.dormitory
-        << " | " << a.major
-        << " | " << a.year << endl;
+    if (!a.name.empty()) {
+        out << "Student | " << a.name
+            << " | " << a.sex
+            << " | " << a.ID
+            << " | " << a.birthday
+            << " | " << a.address
+            << " | " << a.age
+            << " | " << a.number
+            << " | " << a.dormitory
+            << " | " << a.major
+            << " | " << a.year << endl;
+    }
     return out;
 }
 istream &operator>>(istream &in, Student &a) {
@@ -531,6 +541,12 @@ istream &operator>>(istream &in, Student &a) {
     in >> a.year;
 
     return in;
+}
+void Student::add(vector<Student> &X, const Student &a) {
+    if (Student::lookup(X, a.number))
+        X.push_back(a);
+    else
+        cout << "\nRecord with student number " << a.number << " already exists\n";
 }
 void Student::print(vector<Student> &X, string const &stud_num) {
     auto it = find_if(X.begin(), X.end(), [stud_num](const Student &t) -> bool {
@@ -600,19 +616,21 @@ bool Student::lookup(vector<Student> &X, string const &stud_num) {
 }
 
 ostream &operator<<(ostream &out, const Professor &a) {
-    out << "Professor | " << a.name
-       << " | " << a.sex
-       << " | " << a.ID
-       << " | " << a.birthday
-       << " | " << a.address
-       << " | " << a.age
-       << " | " << a.worker_number
-       << " | " << a.appartment
-       << " | " << a.dailyHours
-       << " | " << a.salary
-       << " | " << a.fieldOfTeaching
-       << " | " << a.research
-       << " | " << a.numOfPostgrads << endl;
+    if (!a.name.empty()) {
+        out << "Professor | " << a.name
+            << " | " << a.sex
+            << " | " << a.ID
+            << " | " << a.birthday
+            << " | " << a.address
+            << " | " << a.age
+            << " | " << a.worker_number
+            << " | " << a.appartment
+            << " | " << a.dailyHours
+            << " | " << a.salary
+            << " | " << a.fieldOfTeaching
+            << " | " << a.research
+            << " | " << a.numOfPostgrads << endl;
+    }
     return out;
 }
 istream &operator>>(istream &in, Professor &a) {
@@ -654,6 +672,7 @@ istream &operator>>(istream &in, Professor &a) {
 
     return in;
 }
+
 void Professor::print(vector<Professor> &X, const unsigned long &work_num) {
     auto it = find_if(X.begin(), X.end(), [work_num](const Professor &t) -> bool {
       return t.worker_number == work_num;
@@ -735,17 +754,19 @@ bool Professor::lookup(vector<Professor> &X, const unsigned long &work_num) {
 }
 
 ostream &operator<<(ostream &out, const Worker &a) {
-    out << "Worker | " << a.name
-       << " | " << a.sex
-       << " | " << a.ID
-       << " | " << a.birthday
-       << " | " << a.address
-       << " | " << a.age
-       << " | " << a.worker_number
-       << " | " << a.appartment
-       << " | " << a.dailyHours
-       << " | " << a.salary
-       << " | " << a.job << endl;
+    if (!a.name.empty()) {
+        out << "Worker | " << a.name
+            << " | " << a.sex
+            << " | " << a.ID
+            << " | " << a.birthday
+            << " | " << a.address
+            << " | " << a.age
+            << " | " << a.worker_number
+            << " | " << a.appartment
+            << " | " << a.dailyHours
+            << " | " << a.salary
+            << " | " << a.job << endl;
+    }
     return out;
 }
 istream &operator>>(istream &in, Worker &a) {
