@@ -21,16 +21,17 @@ class Record {
         cout << "             Sex: ";
         cin >> sex;
         while (sex != 'M' || sex != 'F') {
-            cerr << "\nWrong input. Please enter M or F\n";
             if (sex == 'M' || sex == 'F')
                 break;
+            cerr << "\nWrong input. Please enter M or F\n";
+
             cout << "             Sex: ";
             cin >> sex;
         }
         while (!cin) {
             cin.clear();
             cin.ignore(999, '\n');
-            cerr << "\nWrong input. Please enter M or F";
+            cerr << "\n--Wrong input. Please enter M or F";
             cout << "\n             Sex: ";
             cin >> sex;
             if (cin)         //doesn't change a shit
@@ -40,7 +41,7 @@ class Record {
         cin >> ID;
         cout << "             Birthday: ";
         cin >> birthday;
-        cin.ignore();     // skips \n
+        cin.ignore();
         cout << "             Address: ";
         getline(cin, address);
 
@@ -89,7 +90,6 @@ class Student: public Record {
             cout << "\n             Year: ";
             cin >> year;
         }
-//        cin.ignore();
         cout << "Press any key to continue...\n";
         cin.ignore();
     }
@@ -140,18 +140,17 @@ class Staff: public Record {
         while (!cin) {
             cin.clear();
             cin.ignore(999, '\n');
-            cerr << "\nWrong input. Please enter a number\n";
-            cout << "             Daily Working Hours: ";
+            cerr << "\nWrong input. Please enter a number";
+            cout << "\n             Daily Working Hours: ";
             cin >> dailyHours;
         }
-
         cout << "             Salary: ";
         cin >> salary;
         while (!cin) {
             cin.clear();
             cin.ignore(999, '\n');
-            cerr << "\nWrong input. Please enter a number\n";
-            cout << "             Salary: ";
+            cerr << "\nWrong input. Please enter a number";
+            cout << "\n             Salary: ";
             cin >> salary;
         }
     }
@@ -167,7 +166,7 @@ class Staff: public Record {
     }
     template<class T, class B>
     static void add(vector<T> &X, const T &a, vector<B> &Z) {
-        if (!(T::lookup(X, a.worker_number) && B::lookup(Z, a.worker_number))) {
+        if (!(T::lookup(X, a.worker_number) || B::lookup(Z, a.worker_number))) {
             X.push_back(a);
             return;
         } else
@@ -178,11 +177,10 @@ class Professor: public Staff {
  protected:
     string fieldOfTeaching;
     string research;
-    short numOfPostgrads;
+    unsigned short numOfPostgrads;
  public:
     Professor() {
-        string temp;
-        cin.ignore();     // skips \n
+        cin.ignore();
         cout << "             Field Of Teaching: ";
         getline(cin, fieldOfTeaching);
         cout << "             Research Project: ";
@@ -192,12 +190,11 @@ class Professor: public Staff {
         while (!cin) {
             cin.clear();
             cin.ignore(999, '\n');
-            cerr << "\nWrong input. Please enter a number\n";
-            cout << "             Number Of Postgraduate Students: ";
+            cerr << "\nWrong input. Please enter a number";
+            cout << "\n             Number Of Postgraduate Students: ";
             cin >> numOfPostgrads;
         }
 
-//        cin.ignore();
         cout << "Press any key to continue...\n";
         cin.ignore();
     }
@@ -206,7 +203,7 @@ class Professor: public Staff {
               string const &g, string const &h, const unsigned &j,
               const unsigned &k,
               string const &l, string const &m,
-              const unsigned &n) : Staff(a, b, c, d, e, f, g, h, j, k) {
+              const unsigned short &n) : Staff(a, b, c, d, e, f, g, h, j, k) {
         fieldOfTeaching = l;
         research = m;
         numOfPostgrads = n;
@@ -235,6 +232,7 @@ class Worker: public Staff {
     string job;
  public:
     Worker() {
+        cin.ignore();
         cout << "             Job: ";
         getline(cin, job);
         cout << "Press any key to continue...\n";
@@ -242,7 +240,7 @@ class Worker: public Staff {
     }
     Worker(string const &a, const char &b, string const &c,
            string const &d, string const &e, const unsigned short &f,
-           string const &g, string const &h, const unsigned &j,
+           string const &g, string const &h, const unsigned short &j,
            const unsigned &k, string const &l) : Staff(a, b, c, d, e, f, g, h, j, k) {
         job = l;
     }
@@ -251,9 +249,7 @@ class Worker: public Staff {
             && a.birthday == birthday && a.address == address
             && a.age == age && a.worker_number == worker_number
             && a.appartment == appartment && a.dailyHours == dailyHours
-            && a.salary == salary && a.job == job
-
-        );
+            && a.salary == salary && a.job == job);
     }
     friend ostream &operator<<(ostream &out, const Worker &a);
     friend istream &operator>>(istream &in, Worker &a);
@@ -332,12 +328,12 @@ void initialization(vector<Student> &list1, vector<Professor> &list2, vector<Wor
             list1.push_back(input_temporary);
         }
         if (temporary == "Professor") {
-            Professor input_temporary("", 'a', "", "", "", 0, 0, "", 0, 0, "", "", 0);
+            Professor input_temporary("", 'a', "", "", "", 0, nullptr, "", 0, 0, "", "", 0);
             XX >> input_temporary;
             list2.push_back(input_temporary);
         }
         if (temporary == "Worker") {
-            Worker input_temporary("", 'a', "", "", "", 0, 0, "", 0, 0, "");
+            Worker input_temporary("", 'a', "", "", "", 0, nullptr, "", 0, 0, "");
             XX >> input_temporary;
             list3.push_back(input_temporary);
         }
@@ -348,7 +344,7 @@ void initialization(vector<Student> &list1, vector<Professor> &list2, vector<Wor
 
 void fin_out(const vector<Student> &list1, const vector<Professor> &list2,
              const vector<Worker> &list3) {
-    cout << "Enter the filename of output database (e.g. \"out.txt\") if u have it already: ";
+    cout << "Enter the filename of output database (e.g. \"out.txt\"): ";
     cin.ignore();
     string database_name;
     getline(cin, database_name);
@@ -401,7 +397,6 @@ int main() {
                     cin >> temp_studnum;
                     Student::print(students, temp_studnum);
                     goto STUDENT_SCREEN;
-                    break;
                 }
                 case 3: {   //Changing
                     cout << "Student number of a student record you want to change: ";
@@ -416,9 +411,9 @@ int main() {
                     auto it = find(students.begin(), students.end(), to_be_deleted);
                     if (it != students.end()) {
                         students.erase(it);
-                        cout << "Record has been succesfully deleted.\n";
+                        cout << "\nRecord has been succesfully deleted.\n";
                     } else
-                        cout << "No record with such information were found.\n";
+                        cout << "\nNo record with such information were found.\n";
                     goto STUDENT_SCREEN;
                 }
                 case 5: {   //Find
@@ -426,9 +421,9 @@ int main() {
                     string temp_studnum;
                     cin >> temp_studnum;
                     if (Student::lookup(students, temp_studnum))
-                        cout << "There's a student with student number " << temp_studnum << "\n";
+                        cout << "\nThere's a student with student number " << temp_studnum << "\n";
                     else
-                        cout << "There's no student with student number " << temp_studnum << "\n";
+                        cout << "\nThere's no student with student number " << temp_studnum << "\n";
                     goto STUDENT_SCREEN;
                 }
                 case 6: {   //leave
@@ -484,9 +479,9 @@ int main() {
                     string temp_worknum;
                     cin >> temp_worknum;
                     if (Professor::lookup(professors, temp_worknum))
-                        cout << "There's a professor with such worker number.\n\n";
+                        cout << "\nThere's a professor with such worker number.\n\n";
                     else
-                        cout << "There's no professor with such worker number\n\n";
+                        cout << "\nThere's no professor with such worker number\n\n";
                     goto PROFESSOR_SCREEN;
                 }
                 case 6: {   //leave
@@ -530,9 +525,9 @@ int main() {
                     auto it = find(workers.begin(), workers.end(), to_be_deleted);
                     if (it != workers.end()) {
                         workers.erase(it);
-                        cout << "Record has been succesfully deleted.\n";
+                        cout << "\nRecord has been succesfully deleted.\n";
                     } else
-                        cout << "No record with such information were found.\n";
+                        cout << "\nNo record with such information were found.\n";
                     goto WORKER_SCREEN;
                 }
                 case 5: {   //Find
@@ -540,9 +535,9 @@ int main() {
                     string temp_worknum;
                     cin >> temp_worknum;
                     if (Worker::lookup(workers, temp_worknum))
-                        cout << "There's a worker with such worker number.\n";
+                        cout << "\nThere's a worker with such worker number.\n";
                     else
-                        cout << "There's no worker with such worker number\n";
+                        cout << "\nThere's no worker with such worker number\n";
                     goto WORKER_SCREEN;
                 }
                 case 6: {   //leave
@@ -597,6 +592,9 @@ istream &operator>>(istream &in, Student &a) {
 
     in.ignore(2, ' ');
     getline(in, a.address, '|');
+//    while(find(a.address.rbegin(), a.address.rbegin()+2, ' ')){
+//        a.address.erase(find(a.address.rbegin(), a.address.rbegin()+2, ' '));
+//    }
     in.ignore(2, ' ');
 
     in >> a.age;
@@ -740,11 +738,11 @@ void Professor::print(vector<Professor> &X, string const &work_num) {
              << "\nField Of Teaching: " << it->fieldOfTeaching
              << "\nResearch Project: " << it->research
              << "\nNumber Of Postgraduate Students: " << it->numOfPostgrads;
-        cin.ignore();
+//        cin.ignore();
         cout << "\n\nPress any key to continue...\n";
         cin.get();
     } else {
-        cout << "There's no professor with number " << work_num << endl << endl;
+        cout << "\nThere's no professor with number\n" << work_num << endl << endl;
     }
 }
 void Professor::change(vector<Professor> &X, string const &work_num) {
