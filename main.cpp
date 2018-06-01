@@ -150,7 +150,7 @@ class Staff: public Record {
         while (!cin) {
             cin.clear();
             cin.ignore(999, '\n');
-            cerr << "\nWrong input. Please enter a studNum";
+            cerr << "\nWrong input. Please enter a number";
             cout << "\n             Daily Working Hours: ";
             cin >> dailyHours;
         }
@@ -159,7 +159,7 @@ class Staff: public Record {
         while (!cin) {
             cin.clear();
             cin.ignore(999, '\n');
-            cerr << "\nWrong input. Please enter a studNum";
+            cerr << "\nWrong input. Please enter a number";
             cout << "\n             Salary: ";
             cin >> salary;
         }
@@ -180,7 +180,7 @@ class Staff: public Record {
             X.push_back(a);
             return;
         } else
-            cout << "\nRecord with worker studNum " << a.worker_number << " already exists\n";
+            cout << "\nRecord with worker number " << a.worker_number << " already exists\n";
     }
 };
 class Professor: public Staff {
@@ -200,7 +200,7 @@ class Professor: public Staff {
         while (!cin) {
             cin.clear();
             cin.ignore(999, '\n');
-            cerr << "\nWrong input. Please enter a studNum";
+            cerr << "\nWrong input. Please enter a number";
             cout << "\n             Number Of Postgraduate Students: ";
             cin >> numOfPostgrads;
         }
@@ -236,7 +236,6 @@ class Professor: public Staff {
 
     static bool lookup(vector<Professor> &X, string const &work_num);
 };
-
 class Worker: public Staff {
  protected:
     string job;
@@ -293,30 +292,6 @@ void second_screen() {
          << "6) Exit\n";
 }
 
-//void nesting(int option){                                  //second screen choosing menu
-//    second_screen();
-//    cin >> option;
-//    switch (option) {                                     //add screen cleaning
-//    case 1:
-//        break;
-//    case 2:
-//
-//        break;
-//    case 3:
-//
-//        break;
-//    case 4:
-//
-//        break;
-//    case 5:
-//
-//        break;
-//    default:
-//        cerr << "Wrong Input\n";
-//        break;
-//    }
-//}
-
 void initialization(vector<Student> &list1, vector<Professor> &list2, vector<Worker> &list3) {
     cout << "Enter the filename of database (e.g. \"in.txt\") if u have it already: ";
 
@@ -351,7 +326,6 @@ void initialization(vector<Student> &list1, vector<Professor> &list2, vector<Wor
     XX.close();
     ClearScreen();
 }
-
 void fin_out(const vector<Student> &list1, const vector<Professor> &list2,
              const vector<Worker> &list3) {
     cout << "Enter the filename of output database (e.g. \"out.txt\"): ";
@@ -402,14 +376,14 @@ int main() {
                     goto STUDENT_SCREEN;
                 }
                 case 2: {   //Printing
-                    cout << "Student studNum of a student you want to print: ";
+                    cout << "Student number of a student you want to print: ";
                     string temp_studnum;
                     cin >> temp_studnum;
                     Student::print(students, temp_studnum);
                     goto STUDENT_SCREEN;
                 }
                 case 3: {   //Changing
-                    cout << "Student studNum of a student record you want to change: ";
+                    cout << "Student number of a student record you want to change: ";
                     string temp_studnum;
                     cin >> temp_studnum;
                     Student::change(students, temp_studnum);
@@ -427,13 +401,13 @@ int main() {
                     goto STUDENT_SCREEN;
                 }
                 case 5: {   //Find
-                    cout << "Student studNum of a student you want to find: ";
+                    cout << "Student number of a student you want to find: ";
                     string temp_studnum;
                     cin >> temp_studnum;
                     if (Student::lookup(students, temp_studnum))
-                        cout << "\nThere's a student with student studNum " << temp_studnum << "\n";
+                        cout << "\nThere's a student with student number " << temp_studnum << "\n";
                     else
-                        cout << "\nThere's no student with student studNum " << temp_studnum << "\n";
+                        cout << "\nThere's no student with student number " << temp_studnum << "\n";
                     goto STUDENT_SCREEN;
                 }
                 case 6: {   //leave
@@ -460,14 +434,14 @@ int main() {
                     goto PROFESSOR_SCREEN;
                 }
                 case 2: {   //Printing
-                    cout << "Worker studNum of a professor you want to print: ";
+                    cout << "Worker number of a professor you want to print: ";
                     string temp_worknum;
                     cin >> temp_worknum;
                     Professor::print(professors, temp_worknum);
                     goto PROFESSOR_SCREEN;
                 }
                 case 3: {   //Changing
-                    cout << "Worker studNum of a professor record you want to change: ";
+                    cout << "Worker number of a professor record you want to change: ";
                     string temp_worknum;
                     cin >> temp_worknum;
                     Professor::change(professors, temp_worknum);
@@ -485,13 +459,13 @@ int main() {
                     goto PROFESSOR_SCREEN;
                 }
                 case 5: {   //Find
-                    cout << "Worker studNum of a professor you want to find: ";
+                    cout << "Worker number of a professor you want to find: ";
                     string temp_worknum;
                     cin >> temp_worknum;
                     if (Professor::lookup(professors, temp_worknum))
-                        cout << "\nThere's a professor with such worker studNum.\n\n";
+                        cout << "\nThere's a professor with such worker number.\n\n";
                     else
-                        cout << "\nThere's no professor with such worker studNum\n\n";
+                        cout << "\nThere's no professor with such worker number\n\n";
                     goto PROFESSOR_SCREEN;
                 }
                 case 6: {   //leave
@@ -516,14 +490,14 @@ int main() {
                     goto WORKER_SCREEN;
                 }
                 case 2: {   //Printing
-                    cout << "Worker studNum of a worker you want to print: ";
+                    cout << "Worker number of a worker you want to print: ";
                     string temp_worknum;
                     cin >> temp_worknum;
                     Worker::print(workers, temp_worknum);
                     goto WORKER_SCREEN;
                 }
                 case 3: {   //Changing
-                    cout << "Worker studNum of a worker record you want to change: ";
+                    cout << "Worker number of a worker record you want to change: ";
                     string temp_worknum;
                     cin >> temp_worknum;
                     Worker::change(workers, temp_worknum);
@@ -541,13 +515,13 @@ int main() {
                     goto WORKER_SCREEN;
                 }
                 case 5: {   //Find
-                    cout << "Worker studNum of a worker you want to find: ";
+                    cout << "Worker number of a worker you want to find: ";
                     string temp_worknum;
                     cin >> temp_worknum;
                     if (Worker::lookup(workers, temp_worknum))
-                        cout << "\nThere's a worker with such worker studNum.\n";
+                        cout << "\nThere's a worker with such worker number.\n";
                     else
-                        cout << "\nThere's no worker with such worker studNum\n";
+                        cout << "\nThere's no worker with such worker number\n";
                     goto WORKER_SCREEN;
                 }
                 case 6: {   //leave
@@ -624,7 +598,7 @@ void Student::add(vector<Student> &X, const Student &a) {
         X.push_back(a);
         return;
     } else
-        cout << "\nRecord with student studNum " << a.studNum << " already exists\n";
+        cout << "\nRecord with student number " << a.studNum << " already exists\n";
 }
 void Student::print(vector<Student> &X, string const &stud_num) {
     auto it = find_if(X.begin(), X.end(), [stud_num](const Student &t) -> bool {
@@ -645,7 +619,7 @@ void Student::print(vector<Student> &X, string const &stud_num) {
         cout << "\n\nPress any key to continue...\n";
         cin.get();
     } else {
-        cout << "\nThere's no student with student studNum " << stud_num << endl << endl;
+        cout << "\nThere's no student with student number " << stud_num << endl << endl;
     }
 }
 void Student::change(vector<Student> &X, string const &stud_num) {
@@ -653,10 +627,10 @@ void Student::change(vector<Student> &X, string const &stud_num) {
       return t.studNum == stud_num;
     });
     if (it == X.end()) {
-        cout << "There's no student with such studNum.\nPress enter to proceed\n\n";
+        cout << "There's no student with such number.\nPress enter to proceed\n\n";
         cin.get();
     } else {
-        cout << "A student with studNum " << stud_num << " has been succefully found.\n\n"
+        cout << "A student with number " << stud_num << " has been succefully found.\n\n"
              << "Now you can change all information.\n";
         X.erase(it);
         Student anewone;
@@ -727,7 +701,6 @@ istream &operator>>(istream &in, Professor &a) {
 
     return in;
 }
-
 void Professor::print(vector<Professor> &X, string const &work_num) {
     auto it = find_if(X.begin(), X.end(), [work_num](const Professor &t) -> bool {
       return t.worker_number == work_num;
@@ -750,7 +723,7 @@ void Professor::print(vector<Professor> &X, string const &work_num) {
         cout << "\n\nPress any key to continue...\n";
         cin.get();
     } else {
-        cout << "\nThere's no professor with studNum\n" << work_num << endl << endl;
+        cout << "\nThere's no professor with number\n" << work_num << endl << endl;
     }
 }
 void Professor::change(vector<Professor> &X, string const &work_num) {
@@ -758,10 +731,10 @@ void Professor::change(vector<Professor> &X, string const &work_num) {
       return t.worker_number == work_num;
     });
     if (it == X.end()) {
-        cout << "There's no record with such studNum.\nPress enter to proceed\n\n";
+        cout << "There's no record with such number.\nPress enter to proceed\n\n";
         cin.get();
     } else {
-        cout << "A professor with studNum " << work_num << " has been succefully found.\n\n"
+        cout << "A professor with number " << work_num << " has been succefully found.\n\n"
              << "Now you can change all information.\n";
         X.erase(it);
         Professor anewone;
@@ -843,7 +816,7 @@ void Worker::print(vector<Worker> &X, string const &work_num) {
         cout << "\n\nPress any key to continue...\n";
         cin.get();
     } else {
-        cout << "\nThere's no worker with studNum\n" << work_num << endl;
+        cout << "\nThere's no worker with number\n" << work_num << endl;
     }
 }
 void Worker::change(vector<Worker> &X, string const &work_num) {
@@ -851,10 +824,10 @@ void Worker::change(vector<Worker> &X, string const &work_num) {
       return t.worker_number == work_num;
     });
     if (it == X.end()) {
-        cout << "There's no record with such studNum.\nPress enter to proceed\n\n";
+        cout << "There's no record with such number.\nPress enter to proceed\n\n";
         cin.get();
     } else {
-        cout << "A worker with studNum " << work_num << " has been succefully found.\n\n"
+        cout << "A worker with number " << work_num << " has been succefully found.\n\n"
              << "Now you can change all information.\n";
         X.erase(it);
         Worker anewone;
@@ -868,3 +841,5 @@ bool Worker::lookup(vector<Worker> &X, string const &work_num) {
 
     return !(it == X.end());
 }
+
+
