@@ -60,7 +60,7 @@ class Record {
         while (!cin) {
             cin.clear();
             cin.ignore(999, '\n');
-            cerr << "\nWrong input. Please enter a studNum";
+            cerr << "\nWrong input. Please enter a number";
             cout << "\n             Age: ";
             cin >> age;
         }
@@ -96,7 +96,7 @@ class Student: public Record {
         while (!cin) {
             cin.clear();
             cin.ignore(999, '\n');
-            cerr << "\nWrong input. Please enter a studNum";
+            cerr << "\nWrong input. Please enter a number";
             cout << "\n             Year: ";
             cin >> year;
         }
@@ -305,8 +305,8 @@ void initialization(vector<Student> &list1, vector<Professor> &list2, vector<Wor
     if (!XX)
         cerr << "couldn't open " << database_name << "\n";
     cout << "initialization is in progress...\n";
-    unsigned long i, j, k;
-    i = j = k = 0;
+//    unsigned long i, j, k;
+//    i=j=k=0;
     string temporary;
     while (XX) {
 
@@ -315,24 +315,24 @@ void initialization(vector<Student> &list1, vector<Professor> &list2, vector<Wor
             Student input_temporary("", 'a', "", "", "", 0, "", "", "", 0);
             XX >> input_temporary;
             list1.push_back(input_temporary);
-            ++i;
+//            ++i;
         }
 
         if (temporary == "Professor") {
             Professor input_temporary("", 'a', "", "", "", 0, "", "", 0, 0, "", "", 0);
             XX >> input_temporary;
             list2.push_back(input_temporary);
-            ++j;
+//            ++j;
         }
         if (temporary == "Worker") {
             Worker input_temporary("", 'a', "", "", "", 0, "", "", 0, 0, "");
             XX >> input_temporary;
             list3.push_back(input_temporary);
-            ++k;
+//            ++k;
         }
     }
     XX.close();
-    cout << "Total: " << i << " students\n" << j << " professors\n" << k << " workers\n";
+//    cout << "Total: " << i << " students\n" << j << " professors\n" << k << " workers\n";
     ClearScreen();
 }
 void fin_out(const vector<Student> &list1, const vector<Professor> &list2,
@@ -357,7 +357,7 @@ void fin_out(const vector<Student> &list1, const vector<Professor> &list2,
 }
 
 int main() {
-    std::ios::sync_with_stdio(false);       //improves I/O speed, because doesn't make sync between c++ and c-style I/O
+//    std::ios::sync_with_stdio(false);       //improves I/O speed, because doesn't make sync between c++ and c-style I/O
     short temp = 0;
 
     vector<Student> students;
