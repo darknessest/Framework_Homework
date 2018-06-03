@@ -44,7 +44,7 @@ class Record {
             cerr << "\n--Wrong input. Please enter M or F";
             cout << "\n             Sex: ";
             cin >> sex;
-            if (cin)         //doesn't change a shit
+            if (cin)         //potentially useless
                 break;
         }
         cout << "             ID: ";
@@ -112,7 +112,7 @@ class Student: public Record {
         major = j;
         year = k;
     }
-    bool operator==(Student const &a) {
+    inline bool operator==(Student const &a) {
         return (a.name == name && a.sex == sex && a.ID == ID
             && a.birthday == birthday && a.address == address
             && a.age == age && a.studNum == studNum
@@ -218,7 +218,7 @@ class Professor: public Staff {
         research = m;
         numOfPostgrads = n;
     }
-    bool operator==(Professor const &a) {
+    inline bool operator==(Professor const &a) {
         return (a.name == name && a.sex == sex && a.ID == ID
             && a.birthday == birthday && a.address == address
             && a.age == age && a.worker_number == worker_number
@@ -253,7 +253,7 @@ class Worker: public Staff {
            const unsigned &k, string const &l) : Staff(a, b, c, d, e, f, g, h, j, k) {
         job = l;
     }
-    bool operator==(Worker const &a) {
+    inline bool operator==(Worker const &a) {
         return (a.name == name && a.sex == sex && a.ID == ID
             && a.birthday == birthday && a.address == address
             && a.age == age && a.worker_number == worker_number
@@ -270,6 +270,9 @@ class Worker: public Staff {
     static bool lookup(vector<Worker> &X, string const &work_num);
 };
 void ClearScreen() {
+
+//    system("cls");
+
 //      printf("\033c"); //check which one is working
     printf("\033[H\033[J");
 //    cout << string(100, '\n');
@@ -302,7 +305,8 @@ void initialization(vector<Student> &list1, vector<Professor> &list2, vector<Wor
     if (!XX)
         cerr << "couldn't open " << database_name << "\n";
     cout << "initialization is in progress...\n";
-
+    unsigned long i, j, k;
+    i = j = k = 0;
     string temporary;
     while (XX) {
 
@@ -311,19 +315,24 @@ void initialization(vector<Student> &list1, vector<Professor> &list2, vector<Wor
             Student input_temporary("", 'a', "", "", "", 0, "", "", "", 0);
             XX >> input_temporary;
             list1.push_back(input_temporary);
+            ++i;
         }
+
         if (temporary == "Professor") {
-            Professor input_temporary("", 'a', "", "", "", 0, nullptr, "", 0, 0, "", "", 0);
+            Professor input_temporary("", 'a', "", "", "", 0, "", "", 0, 0, "", "", 0);
             XX >> input_temporary;
             list2.push_back(input_temporary);
+            ++j;
         }
         if (temporary == "Worker") {
-            Worker input_temporary("", 'a', "", "", "", 0, nullptr, "", 0, 0, "");
+            Worker input_temporary("", 'a', "", "", "", 0, "", "", 0, 0, "");
             XX >> input_temporary;
             list3.push_back(input_temporary);
+            ++k;
         }
     }
     XX.close();
+    cout << "Total: " << i << " students\n" << j << " professors\n" << k << " workers\n";
     ClearScreen();
 }
 void fin_out(const vector<Student> &list1, const vector<Professor> &list2,
@@ -543,7 +552,6 @@ int main() {
             cin.clear();
             cin.ignore(999, '\n');
             cerr << "\nWrong Input\n\n";
-
             goto FIRST_SCREEN;
         }
     }
@@ -696,8 +704,8 @@ istream &operator>>(istream &in, Professor &a) {
     in.ignore(2, ' ');
 
     getline(in, a.research, '|');
-    in.ignore(2, ' ');
-    cin >> a.numOfPostgrads;
+
+    in >> a.numOfPostgrads;
 
     return in;
 }
