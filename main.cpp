@@ -29,9 +29,11 @@ void initialization(vector<Student> &list1, vector<Professor> &list2, vector<Wor
     getline(cin, database_name);
 
     fstream XX(database_name, ios::in);
-    if (!XX)
-        cerr << "couldn't open " << database_name << "\n";
     cout << "initialization is in progress...\n";
+    if (!XX) {
+        cerr << "couldn't open " << database_name << "\nPress enter to proceed\n";
+        cin.get();
+    }
 
     string temporary;
     while (XX) {
@@ -54,6 +56,7 @@ void initialization(vector<Student> &list1, vector<Professor> &list2, vector<Wor
             list3.push_back(input_temporary);
         }
     }
+
     XX.close();
     ClearScreen();
 }
@@ -79,7 +82,7 @@ void fin_out(const vector<Student> &list1, const vector<Professor> &list2,
 }
 
 int main() {
-    std::ios::sync_with_stdio(false);       //improves I/O speed, because doesn't make sync between c++ and c-style I/O
+//    std::ios::sync_with_stdio(false);       //improves I/O speed, because doesn't make sync between c++ and c-style I/O
     short temp = 0;
 
     vector<Student> students;
@@ -104,6 +107,7 @@ int main() {
                 case 1: {     //Adding record
                     Student temp_inp;
                     Student::add(students, temp_inp);
+                    cin.ignore();
                     goto STUDENT_SCREEN;
                 }
                 case 2: {   //Printing
@@ -111,6 +115,7 @@ int main() {
                     string temp_studnum;
                     cin >> temp_studnum;
                     Student::print(students, temp_studnum);
+                    cin.ignore();
                     goto STUDENT_SCREEN;
                 }
                 case 3: {   //Changing
@@ -118,6 +123,7 @@ int main() {
                     string temp_studnum;
                     cin >> temp_studnum;
                     Student::change(students, temp_studnum);
+                    cin.ignore();
                     goto STUDENT_SCREEN;
                 }
                 case 4: {   //Deleting
@@ -126,19 +132,29 @@ int main() {
                     auto it = find(students.begin(), students.end(), to_be_deleted);
                     if (it != students.end()) {
                         students.erase(it);
-                        cout << "\nRecord has been succesfully deleted.\n";
-                    } else
-                        cout << "\nNo record with such information were found.\n";
+                        cout << "\nRecord has been succesfully deleted.\nPress enter to proceed\n";
+                        cin.ignore();
+                    } else {
+                        cout << "\nNo record with such information were found.\nPress enter to proceed\n";
+                        cin.ignore();
+                    }
                     goto STUDENT_SCREEN;
                 }
                 case 5: {   //Find
                     cout << "Student number of a student you want to find: ";
                     string temp_studnum;
                     cin >> temp_studnum;
-                    if (Student::lookup(students, temp_studnum))
-                        cout << "\nThere's a student with student number " << temp_studnum << "\n";
-                    else
-                        cout << "\nThere's no student with student number " << temp_studnum << "\n";
+                    if (Student::lookup(students, temp_studnum)) {
+                        cin.ignore();
+                        cout << "\nThere's a student with student number " << temp_studnum
+                             << "\nPress enter to proceed";
+                        cin.ignore();
+                    } else {
+                        cin.ignore();
+                        cout << "\nThere's no student with student number " << temp_studnum
+                             << "\nPress enter to proceed";
+                        cin.ignore();
+                    }
                     goto STUDENT_SCREEN;
                 }
                 case 6: {   //leave
@@ -162,6 +178,8 @@ int main() {
                 case 1: {     //Adding record
                     Professor temp_inp;
                     Staff::add(professors, temp_inp, workers);
+                    cin.ignore();
+
                     goto PROFESSOR_SCREEN;
                 }
                 case 2: {   //Printing
@@ -169,6 +187,7 @@ int main() {
                     string temp_worknum;
                     cin >> temp_worknum;
                     Professor::print(professors, temp_worknum);
+                    cin.ignore();
                     goto PROFESSOR_SCREEN;
                 }
                 case 3: {   //Changing
@@ -176,6 +195,7 @@ int main() {
                     string temp_worknum;
                     cin >> temp_worknum;
                     Professor::change(professors, temp_worknum);
+                    cin.ignore();
                     goto PROFESSOR_SCREEN;
                 }
                 case 4: {   //Deleting
@@ -184,19 +204,30 @@ int main() {
                     auto it = find(professors.begin(), professors.end(), to_be_deleted);
                     if (it != professors.end()) {
                         professors.erase(it);
-                        cout << "Record has been succesfully deleted.\n\n";
-                    } else
-                        cout << "No record with such information were found.\n\n";
+                        cin.ignore();
+                        cout << "Record has been succesfully deleted.\nPress enter to proceed";
+                        cin.ignore();
+                    } else {
+                        cin.ignore();
+                        cout << "No record with such information were found.\nPress enter to proceed";
+                        cin.ignore();
+                    }
                     goto PROFESSOR_SCREEN;
                 }
                 case 5: {   //Find
                     cout << "Worker number of a professor you want to find: ";
                     string temp_worknum;
                     cin >> temp_worknum;
-                    if (Professor::lookup(professors, temp_worknum))
-                        cout << "\nThere's a professor with such worker number.\n\n";
-                    else
-                        cout << "\nThere's no professor with such worker number\n\n";
+                    if (Professor::lookup(professors, temp_worknum)) {
+                        cin.ignore();
+                        cout << "\nThere's a professor with such worker number.\nPress enter to proceed";
+                        cin.ignore();
+
+                    } else {
+                        cin.ignore();
+                        cout << "\nThere's no professor with such worker number\nPress enter to proceed";
+                        cin.ignore();
+                    }
                     goto PROFESSOR_SCREEN;
                 }
                 case 6: {   //leave
@@ -218,6 +249,8 @@ int main() {
                 case 1: {     //Adding
                     Worker temp_inp;
                     Staff::add(workers, temp_inp, professors);
+                    cin.ignore();
+
                     goto WORKER_SCREEN;
                 }
                 case 2: {   //Printing
@@ -225,6 +258,8 @@ int main() {
                     string temp_worknum;
                     cin >> temp_worknum;
                     Worker::print(workers, temp_worknum);
+                    cin.ignore();
+
                     goto WORKER_SCREEN;
                 }
                 case 3: {   //Changing
@@ -232,6 +267,7 @@ int main() {
                     string temp_worknum;
                     cin >> temp_worknum;
                     Worker::change(workers, temp_worknum);
+                    cin.ignore();
                     goto WORKER_SCREEN;
                 }
                 case 4: {   //Deleting
@@ -240,19 +276,27 @@ int main() {
                     auto it = find(workers.begin(), workers.end(), to_be_deleted);
                     if (it != workers.end()) {
                         workers.erase(it);
-                        cout << "\nRecord has been succesfully deleted.\n";
-                    } else
-                        cout << "\nNo record with such information were found.\n";
+                        cout << "\nRecord has been succesfully deleted.\nPress enter to proceed";
+                        cin.ignore();
+                    } else {
+                        cout << "\nNo record with such information were found.\nPress enter to proceed";
+                        cin.ignore();
+                    }
                     goto WORKER_SCREEN;
                 }
                 case 5: {   //Find
                     cout << "Worker number of a worker you want to find: ";
                     string temp_worknum;
                     cin >> temp_worknum;
-                    if (Worker::lookup(workers, temp_worknum))
-                        cout << "\nThere's a worker with such worker number.\n";
-                    else
-                        cout << "\nThere's no worker with such worker number\n";
+                    if (Worker::lookup(workers, temp_worknum)) {
+                        cin.ignore();
+                        cout << "\nThere's a worker with such worker number.\nPress enter to proceed";
+                        cin.ignore();
+                    } else {
+                        cin.ignore();
+                        cout << "\nThere's no worker with such worker number.\nPress enter to proceed";
+                        cin.ignore();
+                    }
                     goto WORKER_SCREEN;
                 }
                 case 6: {   //leave

@@ -361,11 +361,12 @@ void Student::print(vector<Student> &X, string const &stud_num) {
              << "\nDormitory Number: " << it->dormitory
              << "\nMajor: " << it->major
              << "\nYear: " << it->year;
-        cin.ignore();
+//        cin.ignore();
         cout << "\n\nPress any key to continue...\n";
-        cin.get();
+        cin.ignore();
     } else {
-        cout << "\nThere's no student with student number " << stud_num << endl << endl;
+        cout << "\nThere's no student with student number " << stud_num << "\nPress enter to proceed";
+        cin.ignore();
     }
 }
 void Student::change(vector<Student> &X, string const &stud_num) {
@@ -373,7 +374,7 @@ void Student::change(vector<Student> &X, string const &stud_num) {
       return t.studNum == stud_num;
     });
     if (it == X.end()) {
-        cout << "There's no student with such number.\nPress enter to proceed\n\n";
+        cout << "There's no student with such number.\nPress enter to proceed";
         cin.get();
     } else {
         cout << "A student with number " << stud_num << " has been succefully found.\n\n"
@@ -467,9 +468,10 @@ void Professor::print(vector<Professor> &X, string const &work_num) {
              << "\nNumber Of Postgraduate Students: " << it->numOfPostgrads;
 //        cin.ignore();
         cout << "\n\nPress any key to continue...\n";
-        cin.get();
+        cin.ignore();
     } else {
-        cout << "\nThere's no professor with number\n" << work_num << endl << endl;
+        cout << "\nThere's no professor with number " << work_num << "\nPress enter to proceed";
+        cin.ignore();
     }
 }
 void Professor::change(vector<Professor> &X, string const &work_num) {
@@ -477,7 +479,7 @@ void Professor::change(vector<Professor> &X, string const &work_num) {
       return t.worker_number == work_num;
     });
     if (it == X.end()) {
-        cout << "There's no record with such number.\nPress enter to proceed\n\n";
+        cout << "There's no record with such number.\nPress enter to proceed";
         cin.get();
     } else {
         cout << "A professor with number " << work_num << " has been succefully found.\n\n"
@@ -558,11 +560,12 @@ void Worker::print(vector<Worker> &X, string const &work_num) {
              << "\nDaily Working Hours: " << it->dailyHours
              << "\nSalary: " << it->salary
              << "\nJob: " << it->job;
-        cin.ignore();
+//        cin.ignore();
         cout << "\n\nPress any key to continue...\n";
-        cin.get();
+        cin.ignore();
     } else {
-        cout << "\nThere's no worker with number\n" << work_num << endl;
+        cout << "\nThere's no worker with number " << work_num << "\nPress enter to proceed";
+        cin.ignore();
     }
 }
 void Worker::change(vector<Worker> &X, string const &work_num) {
@@ -570,7 +573,7 @@ void Worker::change(vector<Worker> &X, string const &work_num) {
       return t.worker_number == work_num;
     });
     if (it == X.end()) {
-        cout << "There's no record with such number.\nPress enter to proceed\n\n";
+        cout << "There's no record with such number.\nPress enter to proceed";
         cin.get();
     } else {
         cout << "A worker with number " << work_num << " has been succefully found.\n\n"
