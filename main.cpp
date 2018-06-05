@@ -222,7 +222,6 @@ int main() {
                         cin.ignore();
                         cout << "\nThere's a professor with such worker number.\nPress enter to proceed";
                         cin.ignore();
-
                     } else {
                         cin.ignore();
                         cout << "\nThere's no professor with such worker number\nPress enter to proceed";
@@ -250,7 +249,6 @@ int main() {
                     Worker temp_inp;
                     Staff::add(workers, temp_inp, professors);
                     cin.ignore();
-
                     goto WORKER_SCREEN;
                 }
                 case 2: {   //Printing
@@ -259,7 +257,6 @@ int main() {
                     cin >> temp_worknum;
                     Worker::print(workers, temp_worknum);
                     cin.ignore();
-
                     goto WORKER_SCREEN;
                 }
                 case 3: {   //Changing
@@ -322,5 +319,3 @@ int main() {
         }
     }
 }
-
-
